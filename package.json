@@ -1,0 +1,54 @@
+{
+  "name": "@dripadmin/drip-table",
+  "version": "0.1.0",
+  "description": "Vue3 + Element Plus business components: DripTable & DripForm",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "readme.md"
+  ],
+  "sideEffects": false,
+  "peerDependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "element-plus": "^2.5.0",
+    "vue": "^3.3.0"
+  },
+  "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.0.0",
+    "vue-tsc": "^3.1.1"
+  },
+  "scripts": {
+    "build:types": "vue-tsc -p tsconfig.json --declaration --emitDeclarationOnly --outDir dist",
+    "build": "pnpm run build:types && vite build -c vite.lib.config.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dripadmin/drip-table.git"
+  },
+  "homepage": "https://github.com/dripadmin/drip-table",
+  "keywords": [
+    "vue3",
+    "element-plus",
+    "table",
+    "form",
+    "drip-table"
+  ]
+}
