@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/dripadmin/drip-table.git"
+    "url": "git+https://github.com/dripadmin/drip-table.git"
   },
   "homepage": "https://github.com/dripadmin/drip-table",
   "keywords": [

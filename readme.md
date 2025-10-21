@@ -135,3 +135,9 @@ app.mount('#app');
   - clearable: 是否可清空（boolean）
   - width: 控件宽度（number | string）
 
+
+# tag
+```
+git tag -a v0.2.13 -m "release v0.2.13"
+git push origin v0.2.13
+```
