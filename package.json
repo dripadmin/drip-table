@@ -1,7 +1,7 @@
 {
   "name": "@dripadmin/drip-table",
-  "version": "0.1.0",
-  "description": "Vue3 + Element Plus business components: DripTable & DripForm",
+  "version": "0.2.12",
+  "description": "",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.cjs",
@@ -12,7 +12,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./style.css": "./dist/style.css"
   },
   "files": [
     "dist",
@@ -33,7 +34,7 @@
   },
   "scripts": {
     "build:types": "vue-tsc -p tsconfig.json --declaration --emitDeclarationOnly --outDir dist",
-    "build": "pnpm run build:types && vite build -c vite.lib.config.ts",
+    "build": "vite build -c vite.lib.config.ts && pnpm run build:types",
     "prepublishOnly": "pnpm run build"
   },
   "publishConfig": {

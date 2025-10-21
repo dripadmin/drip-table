@@ -2,6 +2,27 @@ import type { CSSProperties } from "vue";
 
 export type Align = "left" | "center" | "right";
 
+
+
+export interface RowToolbarAction {
+  label: string;
+  type?: 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
+  disabled?: boolean;
+  event: string;
+  link?: boolean;
+}
+
+export interface DripTableRowToolBar {
+  label?: string;
+  width?: number | string;
+  align?: Align;
+  fixed?: boolean | "left" | "right";
+  size?: "small" | "default" | "large";
+  group?: boolean;
+  actions: RowToolbarAction[];
+  row?: any;
+}
+
 export interface DripTableColumn {
   label: string;
   prop?: string;
@@ -19,18 +40,15 @@ export interface DripTableColumn {
 }
 
 export interface DripTablePagination {
-  total: number;
-  pageSize: number;
   currentPage: number;
-  layout?: string;
+  pageSize: number;
   pageSizes?: number[];
   size?: "small" | "default" | "large";
-  background?: boolean;
-  align?: Align;
-  style?: CSSProperties;
-  class?: string;
   disabled?: boolean;
-  hideOnSinglePage?: boolean;
+  background?: boolean;
+  layout?: string;
+  total: number;
+  align?: Align;
 }
 
 export interface DripTableToolbarConfig {
@@ -61,7 +79,7 @@ export interface DripTableToolbarConfig {
 
 export type Language = any;
 
-export interface PureTableInstallOptions {
+export interface DripTableInstallOptions {
   locale?: string | Language | null;
   i18n?: any | null;
   ssr?: boolean;
@@ -77,12 +95,10 @@ export interface DripTableProps {
   rowHoverBgColor?: string;
   tableKey?: string | number;
   showOverflowTooltip?: boolean;
-  // Pass-through original el-table props. Use loose typing to avoid hard dependency.
   elTableProps?: Record<string, any>;
-  // Optional toolbar configuration
-  toolbar?: DripTableToolbarConfig;
   toolbarLeft?: DripTableToolbarConfig;
   toolbarRight?: DripTableToolbarConfig;
+  rowToolbar?: DripTableRowToolBar;
 }
 
 export interface ExportOptions {

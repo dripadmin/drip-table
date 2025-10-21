@@ -51,7 +51,7 @@
               <ElButton link type="primary" @click="onResetColumns">重置</ElButton>
             </div>
             <div v-for="(key, idx) in orderList" :key="key" class="columns-setting__item" draggable="true"
-                 @dragstart="onDragStart(idx)" @dragover.prevent @drop="onDrop(idx)">
+                @dragstart="onDragStart(idx)" @dragover.prevent @drop="onDrop(idx)">
               <span class="drag-handle">⋮⋮</span>
               <ElCheckbox v-model="visibleMap[key]">{{ keyLabel(key) }}</ElCheckbox>
               <div class="move-actions">
@@ -60,7 +60,7 @@
               </div>
             </div>
             <div class="columns-setting__footer">
-              <ElButton :size="btnSize" type="primary" @click="applyColumns">应用</ElButton>
+              <ElButton link size="default" type="primary" @click="applyColumns">应用</ElButton>
             </div>
           </div>
         </ElPopover>
@@ -76,10 +76,12 @@
 </template>
 
 <script setup lang="ts">
-import type { DripTableToolbarConfig, DripTableColumn } from '../../types/drip-table';
-import { printById, exportToExcel, doRefresh } from './tools';
-import { computed, reactive, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import type { DripTableToolbarConfig, DripTableColumn } from '../../../types/drip-table';
+import { printById, exportToExcel, doRefresh } from '../tools';
+import { computed, reactive, ref, watch, onMounted } from 'vue';
 import { Refresh, Printer, Download, Setting, FullScreen, Menu, CloseBold, ArrowUp, ArrowDown } from '@element-plus/icons-vue';
+defineOptions({ name: "Toolbar" });
+
 
 const props = defineProps<{
   config?: DripTableToolbarConfig;
@@ -263,27 +265,34 @@ function onPrimaryActionClick() {
   margin: 0 !important;
 }
 .columns-setting__item + .columns-setting__item {
-  margin-top: 6px;
+  margin-top: 0px;
 }
 .columns-setting__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  border-bottom: 1px solid var(--el-border-color);
+  height: 30px;
+  line-height: 30px;
 }
 .columns-setting__item {
   display: flex;
   align-items: center;
   gap: 8px;
+  height: 26px;
 }
 .move-actions {
   margin-left: auto;
   display: flex;
-  gap: 2px;
+  gap: 4px;
 }
 .columns-setting__footer {
   margin-top: 8px;
   text-align: right;
+  border-top: 1px solid var(--el-border-color);
+  height: 26px;
+  line-height: 26px;
+  
 }
 .drag-handle {
   cursor: grab;
