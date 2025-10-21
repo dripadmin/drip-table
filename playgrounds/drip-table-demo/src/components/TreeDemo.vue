@@ -1,0 +1,89 @@
+<template>
+  <div>
+    <!-- 配置式筛选表单（独立组件） -->
+    <DripForm :config="formConfig" @submit="onFormSubmit" v-model="formData" />
+    <DripTable
+      :row-key="(row: any) => row.id"
+      :tree-props="{ children: 'children' }"
+      :columns="columns"
+      :data="treeData"
+      :pagination="pagination"
+      :toolbar-left="toolbarLeft"
+      :toolbar-right="toolbarRight"
+      :row-toolbar="tableRowToolbar"
+      :show-overflow-tooltip="true"
+      @page-change="onPageChange"
+      @refresh="onRefresh"
+      @primary-action="onPrimaryAction"
+      @row-action="onRowAction"
+    >
+      <template #titleCell="{ row }">
+        <span style="color: var(--el-color-primary)">{{ row.title }}</span>
+      </template>
+      <template #titleHeader>
+        <span>菜单名称（自定义表头）</span>
+      </template>
+    </DripTable>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted, toRaw } from "vue";
+import { DripTable, DripForm } from "../../../../packages/index";
+import type {
+  DripTablePagination,
+  DripTableToolbarConfig,
+} from "../../../../packages/types/drip-table";
+import { columns, tableRowToolbar, formConfig, formData } from "../config";
+import { getMenuTree } from "../data";
+import { ElMessage } from "element-plus";
+
+// 筛选表单实例
+const formRef = ref<InstanceType<typeof DripForm> | null>(null);
+const treeData = ref<any[]>([]);
+const pagination = ref<DripTablePagination>({
+  total: 0,
+  pageSize: 10,
+  currentPage: 1,
+});
+async function loadTreeData() {
+  treeData.value = await getMenuTree();
+  pagination.value.total = treeData.value.length;
+}
+onMounted(() => {
+  loadTreeData();
+  console.log(treeData.value);
+});
+
+const toolbarLeft = ref<DripTableToolbarConfig>({
+  showPrimaryAction: true,
+  primaryActionText: "新建",
+});
+const toolbarRight = ref<DripTableToolbarConfig>({});
+
+function onFormSubmit(values: Record<string, any>) {
+  formData.value = values;
+  pagination.value.currentPage = 1;
+  ElMessage(toRaw(formData.value));
+}
+
+function onPageChange(size: number, currentPage: number) {
+  console.log("onPageChange", size, currentPage);
+  pagination.value.pageSize = size;
+  pagination.value.currentPage = currentPage;
+}
+
+function onRefresh() {
+  // 模拟调用 API 刷新菜单数据：随机更新状态与排序
+  loadTreeData();
+}
+function onPrimaryAction() {
+  console.log("点击主操作");
+}
+
+function onRowAction(eventName: string, row: any) {
+  console.log(`点击行操作: ${eventName}, 行数据: ${JSON.stringify(row)}`);
+}
+</script>
+
+<style scoped></style>

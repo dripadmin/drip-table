@@ -7,6 +7,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
 const app = createApp(App);
 app.use(ElementPlus);
-app.use(DripTable, { locale: zhCn });
+// app.use(DripTable, { locale: zhCn });
+app.use(DripTable);
 app.use(DripForm);
 app.mount('#app');

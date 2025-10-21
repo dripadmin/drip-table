@@ -50,6 +50,8 @@
         v-bind="innerElTableProps"
         :border="innerElTableProps?.border"
         style="width: 100%"
+        :tree-props="treeProps"
+        :row-key="rowKey"
       >
         <template v-for="(column, idx) in displayColumns" :key="idx">
           <!-- Leaf column -->
@@ -226,6 +228,7 @@ import {
   defaultRowHoverBgColor,
   defaultRowToolbar,
 } from "./default";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 defineOptions({ name: "DripTable" });
 
@@ -239,7 +242,7 @@ const props = defineProps({
     default: undefined,
   },
   enablePage: { type: Boolean, default: true },
-  locale: { type: [String, Object] as PropType<string | any>, default: null },
+  locale: { type: [String, Object] as PropType<string | any>, default: ()=>zhCn },
   rowHoverBgColor: { type: String, default: undefined },
   wrapperStyle: {
     type: Object as PropType<Record<string, any>>,
@@ -264,6 +267,14 @@ const props = defineProps({
     type: Object as PropType<DripTableRowToolBar>,
     default: undefined,
   },
+  treeProps: {
+    type: Object as PropType<Record<string, any>>,
+    default: undefined,
+  },
+  rowKey: {
+    type: [Function, String] as PropType<((row: any) => any) | string>,
+    default: undefined,
+  },
 } satisfies Record<string, any>);
 
 const emit = defineEmits<{
@@ -272,8 +283,6 @@ const emit = defineEmits<{
   (e: "primary-action"): void;
   (e: "row-action", eventName: string, row: any): void;
 }>();
-
-import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 const injectedInstallOptions = inject<DripTableInstallOptions>("locale", {
   locale: null,

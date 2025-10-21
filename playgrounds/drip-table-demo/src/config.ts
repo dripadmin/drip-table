@@ -1,6 +1,10 @@
 import { ref } from "vue";
-import { DripFormConfig, DripTableColumn, DripTableRowToolBar } from "../../../packages";
-
+import { DripFormConfig, DripTableColumn, DripTablePagination, DripTableRowToolBar } from "../../../packages";
+const pagination = ref<DripTablePagination>({
+  total: 0,
+  pageSize: 10,
+  currentPage: 1,
+});
 const columns = ref<DripTableColumn[]>([
   { label: '菜单名称', prop: 'title', slot: 'titleCell', headerSlot: 'titleHeader', minWidth: 160 },
   { label: '路径', prop: 'path', minWidth: 200 },
