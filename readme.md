@@ -6,6 +6,15 @@
 pnpm add vue element-plus @element-plus/icons-vue @dripadmin/drip-table
 ```
 
+# 使用demo参考
+github目录下playgrounds/drip-table-demo文件夹
+github: https://github.com/dripadmin/drip-table
+- 表格组件demo
+![drip-table-demo](./playgrounds/img/table.png)
+- 树表格组件demo
+![drip-table-tree-demo](./playgrounds/img/tree-table.png)
+
+
 # 引入与注册
 
 ```
