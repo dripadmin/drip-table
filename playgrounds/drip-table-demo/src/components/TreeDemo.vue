@@ -8,13 +8,12 @@
       :columns="columns"
       :data="treeData"
       :pagination="pagination"
-      :toolbar-left="toolbarLeft"
-      :toolbar-right="toolbarRight"
+      :toolbar-left="tableToolbarLeft"
+      :toolbar-right="tableToolbarRight"
       :row-toolbar="tableRowToolbar"
       :show-overflow-tooltip="true"
       @page-change="onPageChange"
-      @refresh="onRefresh"
-      @primary-action="onPrimaryAction"
+      @table-action="onTableAction"
       @row-action="onRowAction"
     >
       <template #titleCell="{ row }">
@@ -34,7 +33,7 @@ import type {
   DripTablePagination,
   DripTableToolbarConfig,
 } from "../../../../packages/types/drip-table";
-import { columns, tableRowToolbar, formConfig, formData } from "../config";
+import { columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData } from "../config";
 import { getMenuTree } from "../data";
 import { ElMessage } from "element-plus";
 
@@ -55,11 +54,6 @@ onMounted(() => {
   console.log(treeData.value);
 });
 
-const toolbarLeft = ref<DripTableToolbarConfig>({
-  showPrimaryAction: true,
-  primaryActionText: "新建",
-});
-const toolbarRight = ref<DripTableToolbarConfig>({});
 
 function onFormSubmit(values: Record<string, any>) {
   formData.value = values;
@@ -77,8 +71,14 @@ function onRefresh() {
   // 模拟调用 API 刷新菜单数据：随机更新状态与排序
   loadTreeData();
 }
-function onPrimaryAction() {
-  console.log("点击主操作");
+function onTableAction(eventName: string, data?: any, config?: any) {
+  switch (eventName) {
+    case 'refresh':
+      onRefresh();
+      break;
+    default:
+      console.log('点击主操作', eventName, data, config);
+  }
 }
 
 function onRowAction(eventName: string, row: any) {

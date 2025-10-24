@@ -6,39 +6,23 @@
       :id="String(tableKey)"
       :class="[
         wrapperClass,
-        { 'is-maximized': isMaximized, 'hide-ui': hideUIOnMaximize },
+        { 'is-maximized': isMaximized },
       ]"
     >
       <!-- Toolbars -->
-      <div v-if="showAnyToolbar" class="drip-table__toolbars">
+      <div class="drip-table__toolbars">
         <div class="drip-table__toolbar--left">
           <Toolbar
             v-if="toolbarLeftCfg"
-            :config="toolbarLeftCfg"
-            :columns="columns"
-            :data="data"
-            :table-key="tableKey"
-            @refresh="emit('refresh')"
-            @size-change="onSizeChange"
-            @columns-visibility-change="onColumnsVisibilityChange"
-            @columns-order-change="onColumnsOrderChange"
-            @primary-action="emit('primary-action')"
-            @maximize-toggle="onToggleMaximize"
+            v-bind="toolbarLeftCfg"
+            @action="tableToolbarAction"
           />
         </div>
         <div class="drip-table__toolbar--right">
           <Toolbar
             v-if="toolbarRightCfg"
-            :config="toolbarRightCfg"
-            :columns="columns"
-            :data="data"
-            :table-key="tableKey"
-            @refresh="emit('refresh')"
-            @size-change="onSizeChange"
-            @columns-visibility-change="onColumnsVisibilityChange"
-            @columns-order-change="onColumnsOrderChange"
-            @primary-action="emit('primary-action')"
-            @maximize-toggle="onToggleMaximize"
+            v-bind="toolbarRightCfg" 
+            @action="tableToolbarAction"
           />
         </div>
       </div>
@@ -229,6 +213,7 @@ import {
   defaultRowToolbar,
 } from "./default";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
+import { exportToExcel } from "./tools";
 
 defineOptions({ name: "DripTable" });
 
@@ -278,9 +263,8 @@ const props = defineProps({
 } satisfies Record<string, any>);
 
 const emit = defineEmits<{
+  (e: "table-action", eventName: string, data?: any, config?: any): void;
   (e: "page-change", size: number, currentPage: number): void;
-  (e: "refresh"): void;
-  (e: "primary-action"): void;
   (e: "row-action", eventName: string, row: any): void;
 }>();
 
@@ -337,6 +321,26 @@ function pageCurrentChange(page: number) {
   emit("page-change", paginationCfg.value?.pageSize || 10, page);
 }
 
+//表格级工具条按钮事件
+const tableToolbarAction = (eventName: string, data?: any, config?: any) => {
+  // console.log(eventName, data, config);
+  switch (eventName) {
+    case "columns-visibility-change":
+      onColumnsVisibilityChange(data);
+      break;
+    case "columns-order-change":
+      onColumnsOrderChange(data);
+      break;
+    case "size":
+      onSizeChange(data);
+      break;
+    default:
+      emit("table-action", eventName, data, config);
+      break;
+  }
+  
+};
+
 // ====================Toolbar属性==============================
 const cssVars = computed(() => ({
   "--row-hover-bg-color": props.rowHoverBgColor || defaultRowHoverBgColor,
@@ -358,31 +362,7 @@ const toolbarRightCfg = computed<DripTableToolbarConfig | undefined>(() =>
     ? { ...defaultToolbarRight, ...props.toolbarRight }
     : undefined
 );
-const showAnyToolbar = computed(() => {
-  const left = toolbarLeftCfg.value;
-  const right = toolbarRightCfg.value;
-  const hasLeft = !!(
-    left &&
-    (left.showPrimaryAction ||
-      left.showPrint ||
-      left.showExport ||
-      left.showRefresh ||
-      left.showSize ||
-      left.showColumnSetting ||
-      left.showFullscreen)
-  );
-  const hasRight = !!(
-    right &&
-    (right.showPrimaryAction ||
-      right.showPrint ||
-      right.showExport ||
-      right.showRefresh ||
-      right.showSize ||
-      right.showColumnSetting ||
-      right.showFullscreen)
-  );
-  return hasLeft || hasRight;
-});
+
 
 const rowToolbarCfg = computed<DripTableRowToolBar | undefined>(() =>
   props.rowToolbar ? { ...defaultRowToolbar, ...props.rowToolbar } : undefined
@@ -496,12 +476,12 @@ function onToggleMaximize(val: boolean) {
 }
 
 // 是否在最大化时隐藏工具条/分页等非数据 UI
-const hideUIOnMaximize = computed(() => {
-  const cfg = toolbarRightCfg.value || toolbarLeftCfg.value;
-  const flag = cfg?.fullscreenHideUI;
-  // 默认不隐藏工具条/分页，在 maximize 时保持可见；如需隐藏可在配置中设置 fullscreenHideUI=true
-  return isMaximized.value && (flag === undefined ? false : !!flag);
-});
+// const hideUIOnMaximize = computed(() => {
+//   const cfg = toolbarRightCfg.value || toolbarLeftCfg.value;
+//   const flag = cfg?.fullscreenHideUI;
+//   // 默认不隐藏工具条/分页，在 maximize 时保持可见；如需隐藏可在配置中设置 fullscreenHideUI=true
+//   return isMaximized.value;
+// });
 </script>
 
 <style scoped>
@@ -529,7 +509,9 @@ const hideUIOnMaximize = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  /* border-bottom: 1px solid skyblue;
+  border-top: 1px solid skyblue; */
+  /* margin-bottom: 8px; */
 }
 .drip-table__toolbar--left,
 .drip-table__toolbar--right {

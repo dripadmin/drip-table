@@ -9,14 +9,13 @@
       :columns="columns"
       :data="pagedRows"
       :pagination="pagination"
-      :toolbar-left="toolbarLeft"
-      :toolbar-right="toolbarRight"
+      :toolbar-left="tableToolbarLeft"
+      :toolbar-right="tableToolbarRight"
       :row-toolbar="tableRowToolbar"
       :show-overflow-tooltip="true"
       @page-change="onPageChange"
-      @refresh="onRefresh"
-      @primary-action="onPrimaryAction"
       @row-action="onRowAction"
+      @table-action="onTableAction"
     >
       <template #titleCell="{ row }">
         <span style="color: var(--el-color-primary)">{{ row.title }}</span>
@@ -33,7 +32,7 @@ import { ref, computed, toRaw } from 'vue';
 import { DripTable, DripForm } from '../../../../packages/index';
 import type { DripTablePagination, DripTableToolbarConfig} from '../../../../packages/types/drip-table';
 import { getPage, TOTAL_COUNT } from '../data';
-import { columns, tableRowToolbar, formConfig, formData } from '../config';
+import { columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData } from '../config';
 import { ElMessage } from 'element-plus';
 const pagination = ref<DripTablePagination>({
   total: 1000000,
@@ -71,11 +70,7 @@ const pagedRows = computed(() => {
 });
 
 
-const toolbarLeft = ref<DripTableToolbarConfig>({
-  showPrimaryAction: true,
-  primaryActionText: '新建',
-}); 
-const toolbarRight = ref<DripTableToolbarConfig>({});
+
 
 function onFormSubmit(values: Record<string, any>) {
   filters.value = { ...filters.value, ...values } as any;
@@ -97,8 +92,14 @@ function onRefresh() {
     pagination.value.total = TOTAL_COUNT;
   }, 300);
 }
-function onPrimaryAction() {
-  console.log('点击主操作');
+function onTableAction(eventName: string, data?: any, config?: any) {
+  switch (eventName) {
+    case 'refresh':
+      onRefresh();
+      break;
+    default:
+      console.log('点击主操作', eventName, data, config);
+  }
 }
 
 function onRowAction(eventName: string, row: any) {

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { DripFormConfig, DripTableColumn, DripTablePagination, DripTableRowToolBar } from "../../../packages";
+import { DripFormConfig, DripTableColumn, DripTablePagination, DripTableRowToolBar, DripTableToolbarConfig } from "../../../packages";
 const pagination = ref<DripTablePagination>({
   total: 0,
   pageSize: 10,
@@ -22,6 +22,17 @@ const tableRowToolbar = ref<DripTableRowToolBar>( {
     ]
   });
 
+  const tableToolbarLeft = ref<DripTableToolbarConfig>( { 
+    actions: [
+      { label: '打印',type:'primary', event: 'print',icon:'Printer',config:{fileName:'菜单列表'} },
+      { label: '导出', type: 'warning', event: 'export',icon:'Download',config:{filename:'菜单列表'} }
+    ]
+  });
+
+  const tableToolbarRight = ref<DripTableToolbarConfig>( { 
+    columns: columns.value
+  });
+
 
 const formConfig = ref<DripFormConfig>({
   items: [
@@ -35,4 +46,4 @@ const formData = ref<Record<string, any>>({ keyword: '', type: '1', status: '' }
 
 
 
-export { columns, tableRowToolbar, formConfig, formData }
+export { columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData }

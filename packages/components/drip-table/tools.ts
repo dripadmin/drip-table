@@ -1,4 +1,17 @@
+import { Component } from 'vue';
+import * as ElIcons from '@element-plus/icons-vue';
 import type { ExportOptions } from '../../types/drip-table';
+const IconsMap: Record<string, Component> = ElIcons as unknown as Record<string, Component>;
+
+export const getIcon = (icon: string | Component) => {
+  if (typeof icon !== 'string' || !icon) {
+    return icon as Component | undefined;
+  }
+  // 支持 kebab-case / snake_case / camelCase 到 PascalCase
+  const pascalCaseName = icon.replace(/(^|[-_])(\w)/g, (_s, _a, b) => b.toUpperCase());
+  return IconsMap[pascalCaseName];
+};
+
 
 export function printById(printAreaId?: string) {
   try {
@@ -62,14 +75,3 @@ export function exportToExcel(opts: ExportOptions) {
   URL.revokeObjectURL(url);
 }
 
-export function doRefresh(cb?: () => void, emit?: (e: 'refresh') => void) {
-  if (typeof cb === 'function') {
-    try {
-      cb();
-      return;
-    } catch (e) {
-      // ignore
-    }
-  }
-  emit && emit('refresh');
-}

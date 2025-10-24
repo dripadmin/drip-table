@@ -136,9 +136,7 @@ function getItemLabelWidth(item: DripFormItem): number | string | undefined {
 
 <style scoped>
 .drip-form {
-  margin-bottom: 12px;
   background: #fff;
-  padding: 12px;
   border-radius: 6px;
 }
 </style>

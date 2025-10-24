@@ -13,40 +13,29 @@ export const defaultPagination: Partial<DripTablePagination> = {
 
 // Left toolbar defaults: only primary action by default
 export const defaultToolbarLeft: DripTableToolbarConfig = {
-  showPrimaryAction: true,
-  primaryActionText: '',
-  primaryActionType: 'primary',
-  buttonSize: 'default',
+  size: 'default',
   gap: 8,
-  showPrint: false,
-  showExport: false,
-  showRefresh: false,
-  showSize: false,
-  sizeOptions: ['large', 'default', 'small'],
-  showColumnSetting: false,
-  showFullscreen: false,
-  fullscreenHideUI: false,
-  exportFileName: 'export',
+  btnStyle:'',
+  showIcon: true,
+  showText: true,
+  showTooltip: false,
+  actions:[],
 };
 
-// Right toolbar defaults: refresh, size, columns, fullscreen by default
 export const defaultToolbarRight: DripTableToolbarConfig = {
-  showPrimaryAction: false,
-  primaryActionText: '',
-  primaryActionType: 'primary',
-  buttonSize: 'default',
+  size: 'default',
   gap: 8,
-  showPrint: false,
-  showExport: false,
-  showRefresh: true,
-  showSize: true,
-  sizeOptions: ['large', 'default', 'small'],
-  showColumnSetting: true,
-  showFullscreen: true,
-  fullscreenHideUI: false,
-  exportFileName: 'export',
+  btnStyle:'circle',
+  group: true,
+  showIcon: true,
+  showText: false,
+  showTooltip: true,
+  actions:[
+    { label: '刷新',type:'primary', event: 'refresh',icon:'Refresh' },
+    { label: '行间距', type: 'warning', event: 'size',icon:'Menu' },
+    { label: '列设置', type: 'danger', event: 'columns',icon:'Setting'}
+  ],
 };
-
 
 export const defaultRowToolbar: DripTableRowToolBar = {
   label: '操作',
