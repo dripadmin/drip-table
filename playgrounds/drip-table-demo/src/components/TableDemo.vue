@@ -1,18 +1,14 @@
 <template>
   <div>
     <!-- 配置式筛选表单（独立组件） -->
-    <DripForm :config="formConfig" 
-    @submit="onFormSubmit" 
-    v-model="formData"
-    />
+    <DripForm :config="formConfig" @submit="onFormSubmit" v-model="formData" />
     <DripTable
       :columns="columns"
       :data="pagedRows"
-      :pagination="pagination"
       :toolbar-left="tableToolbarLeft"
       :toolbar-right="tableToolbarRight"
       :row-toolbar="tableRowToolbar"
-      :show-overflow-tooltip="true"
+      :enable-page="true"
       @page-change="onPageChange"
       @row-action="onRowAction"
       @table-action="onTableAction"
@@ -28,26 +24,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, toRaw } from 'vue';
-import { DripTable, DripForm } from '../../../../packages/index';
-import type { DripTablePagination, DripTableToolbarConfig} from '../../../../packages/types/drip-table';
-import { getPage, TOTAL_COUNT } from '../data';
-import { columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData } from '../config';
-import { ElMessage } from 'element-plus';
-const pagination = ref<DripTablePagination>({
-  total: 1000000,
-  pageSize: 10,
-  currentPage: 1,
-});
-
-// 筛选表单实例
-const formRef = ref<InstanceType<typeof DripForm> | null>(null);
-
-
+import { ref, computed, toRaw } from "vue";
+import { DripTable, DripForm } from "../../../../packages/index";
+import { pagination } from "../config";
+import { getPage, TOTAL_COUNT } from "../data";
+import {
+  columns,
+  tableRowToolbar,
+  tableToolbarLeft,
+  tableToolbarRight,
+  formConfig,
+  formData,
+} from "../config";
+import { ElMessage } from "element-plus";
 
 // 筛选条件
-const filters = ref<{ keyword: string; type: string | null; status: string | null }>({ keyword: '', type: null, status: null });
-
+const filters = ref<{
+  keyword: string;
+  type: string | null;
+  status: string | null;
+}>({ keyword: "", type: null, status: null });
 
 // 按需生成当前页数据（不在加载时生成全量），通过 seed 控制刷新后的变化，并在当前页内应用筛选条件
 const dataSeed = ref(1);
@@ -55,7 +51,7 @@ const pagedRows = computed(() => {
   const size = pagination.value.pageSize ?? 10;
   const page = pagination.value.currentPage ?? 1;
   const list = getPage(page, size, dataSeed.value);
-  const kw = (filters.value.keyword || '').trim();
+  const kw = (filters.value.keyword || "").trim();
   const type = filters.value.type;
   const status = filters.value.status;
   return list.filter((row) => {
@@ -69,17 +65,14 @@ const pagedRows = computed(() => {
   });
 });
 
-
-
-
 function onFormSubmit(values: Record<string, any>) {
   filters.value = { ...filters.value, ...values } as any;
   pagination.value.currentPage = 1;
-  ElMessage.info(`筛选条件: ${JSON.stringify(values)}`)
+  ElMessage.info(`筛选条件: ${JSON.stringify(values)}`);
 }
 
-function onPageChange(size: number,currentPage:number) {
-  console.log('onPageChange', size,currentPage);
+function onPageChange(size: number, currentPage: number) {
+  console.log("onPageChange", size, currentPage);
   pagination.value.pageSize = size;
   pagination.value.currentPage = currentPage;
 }
@@ -92,20 +85,22 @@ function onRefresh() {
     pagination.value.total = TOTAL_COUNT;
   }, 300);
 }
+
+//处理表格级Toolbar事件
 function onTableAction(eventName: string, data?: any, config?: any) {
   switch (eventName) {
-    case 'refresh':
+    case "refresh":
       onRefresh();
       break;
     default:
-      console.log('点击主操作', eventName, data, config);
+      console.log("点击主操作", eventName, data, config);
   }
 }
 
+//处理表格行级toolbar事件
 function onRowAction(eventName: string, row: any) {
   console.log(`点击行操作: ${eventName}, 行数据: ${JSON.stringify(row)}`);
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

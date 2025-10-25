@@ -1,6 +1,7 @@
 import type { DripTablePagination, DripTableRowToolBar, DripTableToolbarConfig } from '../../types/drip-table';
 
 export const defaultPagination: Partial<DripTablePagination> = {
+  total: 0,
   currentPage: 1,
   pageSize: 10,
   layout: 'total, sizes, prev, pager, next, jumper',

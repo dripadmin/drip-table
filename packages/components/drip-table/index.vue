@@ -36,6 +36,7 @@
         style="width: 100%"
         :tree-props="treeProps"
         :row-key="rowKey"
+        :default-expand-all="defaultExpandAll"
       >
         <template v-for="(column, idx) in displayColumns" :key="idx">
           <!-- Leaf column -->
@@ -260,6 +261,7 @@ const props = defineProps({
     type: [Function, String] as PropType<((row: any) => any) | string>,
     default: undefined,
   },
+  defaultExpandAll: { type: Boolean, default: false },
 } satisfies Record<string, any>);
 
 const emit = defineEmits<{

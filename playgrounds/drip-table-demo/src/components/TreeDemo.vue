@@ -11,7 +11,7 @@
       :toolbar-left="tableToolbarLeft"
       :toolbar-right="tableToolbarRight"
       :row-toolbar="tableRowToolbar"
-      :show-overflow-tooltip="true"
+      :default-expand-all="defaultExpandAll"
       @page-change="onPageChange"
       @table-action="onTableAction"
       @row-action="onRowAction"
@@ -27,24 +27,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, toRaw } from "vue";
+import { ref, onMounted, toRaw } from "vue";
 import { DripTable, DripForm } from "../../../../packages/index";
-import type {
-  DripTablePagination,
-  DripTableToolbarConfig,
-} from "../../../../packages/types/drip-table";
-import { columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData } from "../config";
+import { pagination, columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData } from "../config";
 import { getMenuTree } from "../data";
 import { ElMessage } from "element-plus";
 
 // 筛选表单实例
 const formRef = ref<InstanceType<typeof DripForm> | null>(null);
 const treeData = ref<any[]>([]);
-const pagination = ref<DripTablePagination>({
-  total: 0,
-  pageSize: 10,
-  currentPage: 1,
-});
+const defaultExpandAll = ref<boolean>(false);
+
 async function loadTreeData() {
   treeData.value = await getMenuTree();
   pagination.value.total = treeData.value.length;
@@ -58,7 +51,7 @@ onMounted(() => {
 function onFormSubmit(values: Record<string, any>) {
   formData.value = values;
   pagination.value.currentPage = 1;
-  ElMessage(toRaw(formData.value));
+  ElMessage.info(`筛选条件: ${JSON.stringify(values)}`);
 }
 
 function onPageChange(size: number, currentPage: number) {
@@ -74,6 +67,13 @@ function onRefresh() {
 function onTableAction(eventName: string, data?: any, config?: any) {
   switch (eventName) {
     case 'refresh':
+      onRefresh();
+      break;
+    case 'expandAll':
+      defaultExpandAll.value = true;
+      break;
+    case 'collapseAll':
+      defaultExpandAll.value = false;
       onRefresh();
       break;
     default:

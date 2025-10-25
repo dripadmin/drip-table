@@ -1,10 +1,11 @@
 import { ref } from "vue";
 import { DripFormConfig, DripTableColumn, DripTablePagination, DripTableRowToolBar, DripTableToolbarConfig } from "../../../packages";
+
 const pagination = ref<DripTablePagination>({
-  total: 0,
   pageSize: 10,
-  currentPage: 1,
+  currentPage: 1
 });
+
 const columns = ref<DripTableColumn[]>([
   { label: '菜单名称', prop: 'title', slot: 'titleCell', headerSlot: 'titleHeader', minWidth: 160 },
   { label: '路径', prop: 'path', minWidth: 200 },
@@ -20,18 +21,19 @@ const tableRowToolbar = ref<DripTableRowToolBar>( {
       { label: '修改', type: 'warning', event: 'edit' },
       { label: '删除', type: 'danger', event: 'delete' }
     ]
-  });
+});
 
-  const tableToolbarLeft = ref<DripTableToolbarConfig>( { 
+const tableToolbarLeft = ref<DripTableToolbarConfig>( { 
     actions: [
       { label: '打印',type:'primary', event: 'print',icon:'Printer',config:{fileName:'菜单列表'} },
-      { label: '导出', type: 'warning', event: 'export',icon:'Download',config:{filename:'菜单列表'} }
+      { label: '导出', type: 'warning', event: 'export',icon:'Download',config:{filename:'菜单列表'} },
+      { label: '全部展开', type: 'primary', event: 'expandAll'},
     ]
   });
 
   const tableToolbarRight = ref<DripTableToolbarConfig>( { 
     columns: columns.value
-  });
+});
 
 
 const formConfig = ref<DripFormConfig>({
@@ -44,6 +46,4 @@ const formConfig = ref<DripFormConfig>({
 
 const formData = ref<Record<string, any>>({ keyword: '', type: '1', status: '' });
 
-
-
-export { columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData }
+export { pagination, columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData }

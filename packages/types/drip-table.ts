@@ -63,7 +63,7 @@ export interface DripTablePagination {
   disabled?: boolean;
   background?: boolean;
   layout?: string;
-  total: number;
+  total?: number;
   align?: Align;
 }
 
