@@ -358,16 +358,11 @@ const toolbarLeft = ref<DripTableToolbarConfig>({
 ```
 在处理定义事件时,通过下面的方法,可以获取到data或者config的值
 然后在case中定义处理每个事件的方法即可.
-
 ```typescript
 //处理表格工具栏事件
 function onTableAction(eventName: string, data?: any, config?: any) {
   switch (eventName) {
     case 'refresh':
-      loadData();
-      break;
-    case 'expandAll':
-      expandAll.value = true;
       loadData();
       break;
     case 'add':  
@@ -385,8 +380,14 @@ const toolbarRight = ref<DripTableToolbarConfig>({
   columns: columns.value
 });
 ```
-
 ![](./playgrounds/img/right-toolbar.png)
+当为treeTable时,会自动处理展开全部,折叠全部事件.
+只需要在toolbar中定义事件名称即可,表格会自动根据event值来判断.
+这里的event值只能是expandAll或者collapseAll.
+```typescript
+{ label: "全部展开", type: "info", event: "expandAll" },
+{ label: "全部折叠", type: "info", event: "collapseAll" },
+```
 
 ## 4.6 DripTableRowToolBar 表格行工具栏(操作列)属性
 ```vue

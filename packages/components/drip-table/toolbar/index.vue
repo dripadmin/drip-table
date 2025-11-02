@@ -26,7 +26,8 @@
             :title="action.label"
             :type="action.type"
             aria-label="size"
-          ><span v-show="props.showText">{{ action.label }}</span></ElButton>
+            ><span v-show="props.showText">{{ action.label }}</span></ElButton
+          >
           <template #dropdown>
             <ElDropdownMenu>
               <ElDropdownItem
@@ -54,7 +55,12 @@
           @columns-order-change="handleAction('columns-order-change', $event)"
         />
 
-        <ElTooltip :disabled="!props.showTooltip" :content="action.label" placement="bottom" v-else>
+        <ElTooltip
+          :disabled="!props.showTooltip"
+          :content="action.label"
+          placement="bottom"
+          v-else
+        >
           <ElButton
             :size="props?.size"
             :circle="isCircle"
@@ -65,10 +71,9 @@
             :type="action.type"
             :icon="props.showIcon ? getIcon(action.icon as string) : ''"
             @click="handleAction(action.event, action.data, action.config)"
-            >
-            <span v-show="props.showText">{{ action.label }}</span>
-            </ElButton
           >
+            <span v-show="props.showText">{{ action.label }}</span>
+          </ElButton>
         </ElTooltip>
       </div>
     </div>
@@ -78,7 +83,6 @@
 <script setup lang="ts">
 import type { DripTableToolbarConfig } from "../../../types/drip-table";
 import { computed, ref } from "vue";
-import type { Component } from "vue";
 import ColumnSetting from "./ColumnSetting.vue";
 import { getIcon } from "../tools";
 

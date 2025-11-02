@@ -4,10 +4,7 @@
       class="drip-table-wrapper"
       :style="mergedWrapperStyle"
       :id="String(tableKey)"
-      :class="[
-        wrapperClass,
-        { 'is-maximized': isMaximized },
-      ]"
+      :class="[wrapperClass, { 'is-maximized': isMaximized }]"
     >
       <!-- Toolbars -->
       <div class="drip-table__toolbars">
@@ -21,7 +18,7 @@
         <div class="drip-table__toolbar--right">
           <Toolbar
             v-if="toolbarRightCfg"
-            v-bind="toolbarRightCfg" 
+            v-bind="toolbarRightCfg"
             @action="tableToolbarAction"
           />
         </div>
@@ -29,6 +26,7 @@
 
       <!-- Table -->
       <ElTable
+        ref="elTableRef"
         :key="tableKey"
         :data="data"
         v-bind="innerElTableProps"
@@ -195,6 +193,7 @@
 
 <script setup lang="ts">
 import { computed, inject, reactive, watch, PropType, ref } from "vue";
+import type { TableInstance } from "element-plus";
 import type {
   DripTableToolbarConfig,
   DripTablePagination,
@@ -228,7 +227,10 @@ const props = defineProps({
     default: undefined,
   },
   enablePage: { type: Boolean, default: true },
-  locale: { type: [String, Object] as PropType<string | any>, default: ()=>zhCn },
+  locale: {
+    type: [String, Object] as PropType<string | any>,
+    default: () => zhCn,
+  },
   rowHoverBgColor: { type: String, default: undefined },
   wrapperStyle: {
     type: Object as PropType<Record<string, any>>,
@@ -325,7 +327,6 @@ function pageCurrentChange(page: number) {
 
 //表格级工具条按钮事件
 const tableToolbarAction = (eventName: string, data?: any, config?: any) => {
-  // console.log(eventName, data, config);
   switch (eventName) {
     case "columns-visibility-change":
       onColumnsVisibilityChange(data);
@@ -336,11 +337,16 @@ const tableToolbarAction = (eventName: string, data?: any, config?: any) => {
     case "size":
       onSizeChange(data);
       break;
+    case "expandAll":
+      onToggleExpandAll(true);
+      break;
+    case "collapseAll":
+      onToggleExpandAll(false);
+      break;
     default:
       emit("table-action", eventName, data, config);
       break;
   }
-  
 };
 
 // ====================Toolbar属性==============================
@@ -365,7 +371,6 @@ const toolbarRightCfg = computed<DripTableToolbarConfig | undefined>(() =>
     : undefined
 );
 
-
 const rowToolbarCfg = computed<DripTableRowToolBar | undefined>(() =>
   props.rowToolbar ? { ...defaultRowToolbar, ...props.rowToolbar } : undefined
 );
@@ -377,6 +382,7 @@ const innerElTableProps = reactive<Record<string, any>>({
   ...defaultElTableProps,
   ...(props.elTableProps ?? {}),
 });
+
 watch(
   () => props.elTableProps,
   (val) => {
@@ -467,7 +473,6 @@ function filterColumns(cols: any[]): any[] {
   return result;
 }
 const displayColumns = computed(() => filterColumns(columns.value || []));
-
 const tableKey = computed(() => props.tableKey ?? "drip-table");
 const showOverflowTooltip = computed(() => props.showOverflowTooltip ?? false);
 
@@ -475,6 +480,21 @@ const showOverflowTooltip = computed(() => props.showOverflowTooltip ?? false);
 const isMaximized = ref(false);
 function onToggleMaximize(val: boolean) {
   isMaximized.value = !!val;
+}
+
+const elTableRef = ref<TableInstance>();
+function onToggleExpandAll(expanded: boolean) {
+  toggleExpansion(data.value, expanded);
+}
+function toggleExpansion(data: any[], expanded: boolean) {
+  data.forEach((row) => {
+    // 切换当前行的展开状态
+    elTableRef.value?.toggleRowExpansion(row, expanded);
+    // 如果当前行有子节点，则递归处理其子节点
+    if (row.children && row.children.length > 0) {
+      toggleExpansion(row.children, expanded);
+    }
+  });
 }
 
 // 是否在最大化时隐藏工具条/分页等非数据 UI

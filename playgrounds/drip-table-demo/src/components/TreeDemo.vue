@@ -8,7 +8,7 @@
       :columns="columns"
       :data="treeData"
       :pagination="pagination"
-      :toolbar-left="tableToolbarLeft"
+      :toolbar-left="treeTableToolbarLeft"
       :toolbar-right="tableToolbarRight"
       :row-toolbar="tableRowToolbar"
       :default-expand-all="defaultExpandAll"
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref, onMounted, toRaw } from "vue";
 import { DripTable, DripForm } from "../../../../packages/index";
-import { pagination, columns, tableRowToolbar,tableToolbarLeft,tableToolbarRight, formConfig, formData } from "../config";
+import { pagination, columns, tableRowToolbar,treeTableToolbarLeft,tableToolbarRight, formConfig, formData } from "../config";
 import { getMenuTree } from "../data";
 import { ElMessage } from "element-plus";
 
@@ -67,13 +67,6 @@ function onRefresh() {
 function onTableAction(eventName: string, data?: any, config?: any) {
   switch (eventName) {
     case 'refresh':
-      onRefresh();
-      break;
-    case 'expandAll':
-      defaultExpandAll.value = true;
-      break;
-    case 'collapseAll':
-      defaultExpandAll.value = false;
       onRefresh();
       break;
     default:
