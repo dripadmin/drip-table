@@ -380,7 +380,8 @@ const toolbarRight = ref<DripTableToolbarConfig>({
   columns: columns.value
 });
 ```
-![](./playgrounds/img/right-toolbar.png)
+![](./playgrounds/img/right-toolbar.png)  
+
 当为treeTable时,会自动处理展开全部,折叠全部事件.
 只需要在toolbar中定义事件名称即可,表格会自动根据event值来判断.
 这里的event值只能是expandAll或者collapseAll.
