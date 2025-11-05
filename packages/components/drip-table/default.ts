@@ -56,6 +56,6 @@ export const defaultElTableProps: Record<string, any> = {
 // Default wrapper style and row hover background color
 // 默认容器背景色，支持外部通过 wrapperStyle 覆盖
 export const defaultWrapperStyle: Record<string, any> = {
-  background: '#fff',
+  background: 'var(--el-bg-color)',
 };
 export const defaultRowHoverBgColor: string = 'var(--el-color-primary-light-9)';

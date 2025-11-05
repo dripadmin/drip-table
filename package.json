@@ -1,6 +1,6 @@
 {
   "name": "@dripadmin/drip-table",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "基于element-plus table的二次封装",
   "license": "MIT",
   "type": "module",
