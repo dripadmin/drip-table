@@ -509,31 +509,18 @@ function toggleExpansion(data: any[], expanded: boolean) {
 <style scoped>
 .drip-table-wrapper {
   width: 100%;
-  background: #fff;
+
 }
 .drip-table-wrapper.is-maximized {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #fff;
   overflow: auto;
-}
-.drip-table-wrapper.hide-ui .drip-table__toolbars {
-  display: none;
-}
-.drip-table-wrapper.hide-ui .drip-table__pagination {
-  display: none;
-}
-.drip-table-wrapper :deep(.el-table__row:hover) {
-  background-color: var(--row-hover-bg-color);
 }
 .drip-table__toolbars {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* border-bottom: 1px solid skyblue;
-  border-top: 1px solid skyblue; */
-  /* margin-bottom: 8px; */
 }
 .drip-table__toolbar--left,
 .drip-table__toolbar--right {
