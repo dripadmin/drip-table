@@ -133,10 +133,3 @@ function getItemLabelWidth(item: DripFormItem): number | string | undefined {
   return labelWidth.value as any;
 }
 </script>
-
-<style scoped>
-.drip-form {
-  background: #fff;
-  border-radius: 6px;
-}
-</style>
